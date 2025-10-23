@@ -53,6 +53,7 @@ export default function DetailScreen({ route, navigation }: Props) {
     const official =
       data.sprites?.other?.['official-artwork']?.front_default ?? null;
     return official ?? data.sprites.front_default;
+    // return data.sprites.front_default;
   }, [data]);
 
   if (loading) {
@@ -76,7 +77,13 @@ export default function DetailScreen({ route, navigation }: Props) {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {artwork ? (
-          <Image source={{ uri: artwork }} style={styles.artwork} />
+          <Image
+            source={{ uri: artwork }}
+            style={styles.artwork}
+            defaultSource={{
+              uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data?.id}.png`,
+            }}
+          />
         ) : (
           <View style={[styles.artwork, styles.artworkPlaceholder]} />
         )}
@@ -90,7 +97,6 @@ export default function DetailScreen({ route, navigation }: Props) {
             id: data.id,
             name: data.name,
             imageUrl:
-              data.sprites?.other?.['official-artwork']?.front_default ??
               data.sprites.front_default ??
               `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`,
           }}
@@ -125,8 +131,6 @@ export default function DetailScreen({ route, navigation }: Props) {
   );
 }
 
-const IMAGE_SIZE = 200;
-
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F7F7F7' },
   center: {
@@ -139,8 +143,8 @@ const styles = StyleSheet.create({
   error: { color: '#C62828', textAlign: 'center' },
   content: { padding: 16, alignItems: 'center' },
   artwork: {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
+    width: '100%',
+    aspectRatio: 1,
     resizeMode: 'contain',
     marginBottom: 12,
   },

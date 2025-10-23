@@ -15,8 +15,6 @@ export type Favorite = {
 type FavoritesContextType = {
   favorites: Favorite[];
   isFavorite: (id: number) => boolean;
-  addFavorite: (fav: Favorite) => void;
-  removeFavorite: (id: number) => void;
   toggleFavorite: (fav: Favorite) => void;
 };
 
@@ -32,16 +30,6 @@ export const FavoritesProvider: React.FC<React.PropsWithChildren> = ({
     [favorites],
   );
 
-  const addFavorite = useCallback((fav: Favorite) => {
-    setFavorites(prev =>
-      prev.some(f => f.id === fav.id) ? prev : [...prev, fav],
-    );
-  }, []);
-
-  const removeFavorite = useCallback((id: number) => {
-    setFavorites(prev => prev.filter(f => f.id !== id));
-  }, []);
-
   const toggleFavorite = useCallback((fav: Favorite) => {
     setFavorites(prev => {
       const exists = prev.some(f => f.id === fav.id);
@@ -53,11 +41,9 @@ export const FavoritesProvider: React.FC<React.PropsWithChildren> = ({
     () => ({
       favorites,
       isFavorite,
-      addFavorite,
-      removeFavorite,
       toggleFavorite,
     }),
-    [favorites, isFavorite, addFavorite, removeFavorite, toggleFavorite],
+    [favorites, isFavorite, toggleFavorite],
   );
 
   return (
